@@ -1,5 +1,7 @@
 inp = open('4.txt', 'r')
 lines = inp.readlines()
+
+#Challenge 1
 howManyCols = len(lines[0])
 howManyLines = len(lines)
 XmasCount=0
@@ -52,6 +54,7 @@ for linh in range(0, howManyLines+1):
 
 print("XMAS Count (Challenge 1): ", XmasCount)
 
+#Challenge 2
 inp.seek(0)
 XmasCount=0
 

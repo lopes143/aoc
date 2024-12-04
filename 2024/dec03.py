@@ -1,5 +1,7 @@
 inp = open('3.txt', 'r')
 all = inp.read()
+
+#Challenge 1
 totalCount = 0
 #O mámixo de caracteres é mul(XXX,XXX) : 12 caracteres
 def mul(n1,n2):
@@ -17,6 +19,7 @@ for i in range(0,len(all)):
 
 print('Sum of multiplications (challenge 1):', totalCount)
 
+#Challenge 2
 inp.seek(0)
 totalCount = 0
 do = True

@@ -1,4 +1,6 @@
 ids = open('1.txt', 'r')
+
+#Challenge 1
 id1 = []
 id2 = []
 for line in ids:
@@ -14,6 +16,8 @@ for i1,i2 in zip(id1,id2):
     totalDistance += abs(i1-i2)
 
 print('Total Distance (challenge 1):', totalDistance)
+
+#Challenge 2
 appearance, timesFound = 0, 0
 for i1 in id1:
     for i2 in id2:
