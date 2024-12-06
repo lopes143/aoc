@@ -18,6 +18,7 @@ for line in inp:
     safeCount+=1 if check_line(currentLine) else 0
 
 print('Safe Reports (challenge 1):', safeCount)
+#Right answer: 306
 
 #Challenge 2
 inp.seek(0)
@@ -41,3 +42,4 @@ for line in inp:
         safeCount+=1
 
 print('Safe Reports after Problem Dampener (challenge 2):', safeCount)
+#Right answer: 366

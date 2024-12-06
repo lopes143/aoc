@@ -18,6 +18,7 @@ for i in range(0,len(all)):
                 break
 
 print('Sum of multiplications (challenge 1):', totalCount)
+#Right answer: 170807108
 
 #Challenge 2
 inp.seek(0)
@@ -39,4 +40,5 @@ for i in range(0,len(all)):
                 break
 
 print('Sum of enabled multiplications (challenge 2):', totalCount)
+#Right answer: 74838033
 
