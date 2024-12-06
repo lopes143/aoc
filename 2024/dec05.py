@@ -50,6 +50,12 @@ print('Middle elements sum (challenge 1):', middleCount)
 
 #Challenge 2
 
+def check_all_rules(rules, instruction):
+    for i in rules:
+        if not check_valid(i, instruction, i[0]):
+            return False
+    return True
+
 def determine_wrong_rules(rules, instruction):
     wrongRules = []
     for i in rules:
@@ -58,18 +64,25 @@ def determine_wrong_rules(rules, instruction):
     return wrongRules
 
 def flip(rule, instruction):
-    for i in range(len(instruction)):
-        if instruction[i] == rule[0]:
-            if rule[1] in instruction[:i]:
-                instruction[i] = rule[1]
-                instruction[instruction.index(rule[1])] = rule[0]
-                return instruction
-    return instruction
+    a = instruction.copy()
+    for i in range(len(a)):
+        if a[i] == rule[0]:
+            if rule[1] in a[:i]:
+                a[i] = rule[1]
+                a[a.index(rule[1])] = rule[0]
+                return a
+    return a
 
 fixedOrders = []
 for i in wrongInstructions:
-    for j in determine_wrong_rules(rules, i):
-        i = flip(j, i)
+    fixed = False
+    tempInstruction = i.copy()
+    while not fixed:
+        wrongRules = determine_wrong_rules(rules, tempInstruction)
+        tempInstruction = flip(wrongRules[0], tempInstruction)
+        if check_all_rules(rules, tempInstruction):
+            fixedOrders.append(tempInstruction)
+            fixed = True
         
 
 middleCount=0
