@@ -1,116 +1,72 @@
-input1 = open('input.txt', 'r').read().split('\n')
-input2 = []
-for i in input1: #convert each string to a list of characters
-    a = []
-    for i2 in i:
-        a.append(i2)
-    input2.append(a)
+from tqdm import tqdm
+a = open("input.txt", "r").read().strip().split("\n")
+tab = [list(a2) for a2 in a]
 
-ourTab = input2.copy()
+line_number = len(tab)
+column_number = len(tab[0])
 
-def find_guard(tab):
-    #find "^, v, <, >" in tab
-    for i in range(len(tab)):
-        for i2 in range(len(tab[i])):
-            if tab[i][i2] in ('^', 'v', '<', '>'):
-                return (i, i2)
-    return None #return None if no guard is found
+guardFound = False
+for i in range(line_number):
+    for i2 in range(column_number):
+        if tab[i][i2] in ('^', 'v', '<', '>'):
+            guardFound = True
+            initialX = i
+            initialY = i2
+            break
+    if guardFound:
+        break
 
-def go_up(tab):
-    try:
-        a = find_guard(tab)
-        t = tab.deepcopy()
-        if t[a[0]][a[1]-1] == "-" or t[a[0]][a[1]+1] == "-":
-            t[a[0]][a[1]] = "+"
-        else:
-            t[a[0]][a[1]] = "|"
-        if t[a[0]-1][a[1]] != "|":
-            t[a[0]-1][a[1]] = "^"
-        else:
-            #We're in a loop
-            return "loop"
-        return t
-    except: #The guard has left the map
-        return None
-
-def go_down(tab):
-    #find "v" in tab
-    try:
-        a = find_guard(tab)
-        if tab[a[0]][a[1]-1] == "-" or tab[a[0]][a[1]+1] == "-":
-            tab[a[0]][a[1]] = "+"
-        else:
-            tab[a[0]][a[1]] = "|"
-        tab[a[0]+1][a[1]] = "v"
-        return tab
-    except: #The guard has left the map
-        return None
-
-def go_left(tab):
-    #find "<" in tab
-    try:
-        a = find_guard(tab)
-        if tab[a[0]-1][a[1]] == "|" or tab[a[0]+1][a[1]] == "|":
-            tab[a[0]][a[1]] = "+"
-        else:
-            tab[a[0]][a[1]] = "-"
-        tab[a[0]][a[1]-1] = "<"
-        return tab
-    except: #The guard has left the map
-        return None
-            
-def go_right(tab):
-    #find ">" in tab
-    try:
-        a = find_guard(tab)
-        if tab[a[0]-1][a[1]] == "|" or tab[a[0]+1][a[1]] == "|":
-            tab[a[0]][a[1]] = "+"
-        else:
-            tab[a[0]][a[1]] = "-"
-        tab[a[0]][a[1]+1] = ">"
-        return tab
-    except: #The guard has left the map
-        return None
-
+x, y = initialX, initialY
+directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+currentDirection = 0
+placesSeen = set()
 
 while True:
-    guardPos = find_guard(ourTab)
-    guardState = ourTab[guardPos[0]][guardPos[1]]
 
-    try:    
-        if guardState == "^":
-            if ourTab[guardPos[0]-1][guardPos[1]] == '#':
-                guardState = ">"
-                ourTab[guardPos[0]][guardPos[1]] = ">"
-        elif guardState == ">":
-            if ourTab[guardPos[0]][guardPos[1]+1] == '#':
-                guardState = "v"
-                ourTab[guardPos[0]][guardPos[1]] = "v"
-        elif guardState == "v":
-            if ourTab[guardPos[0]+1][guardPos[1]] == '#':
-                guardState = "<"
-                ourTab[guardPos[0]][guardPos[1]] = "<"
-        elif guardState == "<":
-            if ourTab[guardPos[0]][guardPos[1]-1] == '#':
-                guardState = "^"
-                ourTab[guardPos[0]][guardPos[1]] = "^"
-    except:
-        #Guard has left the map
+    placesSeen.add((x, y))
+    nextX = x + directions[currentDirection][0]
+    nextY = y + directions[currentDirection][1]
+
+    if not (0 <= nextX < line_number and 0 <= nextY < column_number):
         break
 
-    if guardState == "^":
-        go_up(ourTab)
-    elif guardState == "v":
-        go_down(ourTab)
-    elif guardState == "<":
-        go_left(ourTab)
-    elif guardState == ">":
-        go_right(ourTab)
+    if tab[nextX][nextY] == "#":
+        currentDirection = (currentDirection + 1) % 4
     else:
-        break
+        x, y = nextX, nextY
 
-#Count loops
+def will_loop(xx, yy):
+    if tab[xx][yy] == "#":
+        return False
+    
+    tab[xx][yy] = "#"
+    x, y = initialX, initialY
+    currentDirection = 0
+    loopSeen = set()
+    while True:
+        if (x, y, currentDirection) in loopSeen:
+            tab[xx][yy] = "."
+            return True
+        loopSeen.add((x, y, currentDirection))
+
+        nextX = x + directions[currentDirection][0]
+        nextY = y + directions[currentDirection][1]
+
+        if not (0 <= nextX < line_number and 0 <= nextY < column_number):
+            tab[xx][yy] = "."
+            return False
+
+        if tab[nextX][nextY] == "#":
+            currentDirection = (currentDirection + 1) % 4
+        else:
+            x, y = nextX, nextY
+
 loopCount = 0
-for i in ourTab:
-    loopCount += i.count("X")
-print('Loop Count (challenge 2):',loopCount) #+1 because the final guard position is also counted as an X
+for x1, x2 in tqdm(placesSeen):
+    if x1 == initialX and x2 == initialY:
+        #Cannot place obstacle where guard currently is
+        continue
+    if will_loop(x1, x2):
+        loopCount += 1
+
+print("Loop count (challenge 2):", loopCount)
