@@ -1,3 +1,8 @@
+#ignore files without extension (do not push executables)
+*
+!*/
+!*.*
+
 .idea/
 .vscode/
 __pycache__/
