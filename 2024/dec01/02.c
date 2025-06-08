@@ -43,5 +43,6 @@ int main(void) {
     printf("Similarity score (challenge 2): %d\n", appearance);
     //Right answer: 23046913
     
+    fclose(input);
     return 0;
 }

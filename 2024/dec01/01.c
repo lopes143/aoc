@@ -41,5 +41,6 @@ int main(void) {
     printf("Total Distance (challenge 1): %d\n", totalDist);
     //Right answer: 1580061
     
+    fclose(input);
     return 0;
 }
