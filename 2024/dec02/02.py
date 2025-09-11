@@ -1,5 +1,26 @@
 inp = open('input.txt', 'r')
 
+def check_line_new(seq):
+    safe=True
+    safeValues=(1,2,3)
+
+    if (seq[1]-seq[0] > 0):
+        signal=1
+    elif (seq[1]-seq[0] < 0):
+        signal=-1
+    else:
+        return False #if first 2 values are equal, it's not safe
+    
+    for i in range(1,len(seq)):
+        delta=seq[i]-seq[i-1]
+        #Fail if sequence doesn't follow increase/decrease
+        #or delta isn't a safe value
+        if (delta*signal<0 or abs(delta) not in safeValues):
+            safe=False
+            break
+
+    return safe
+
 def check_line(seq):
     leng = len(seq)
     differences = []
@@ -16,14 +37,14 @@ safeCount=0
 for line in inp:
     safeFound=False
     currentLine = [int(x) for x in line.split(' ')]
-    if check_line(currentLine):
+    if check_line_new(currentLine):
         #A linha já é segura
         safeCount+=1
         continue
     for val in range(0, len(currentLine)):
         tempLine = currentLine.copy()
         del(tempLine[val])
-        if check_line(tempLine):
+        if check_line_new(tempLine):
             #Esta sequência cria uma linha segura
             safeCount+=1
             break

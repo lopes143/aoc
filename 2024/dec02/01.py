@@ -1,6 +1,28 @@
 inp = open('input.txt', 'r')
 
 safeCount=0
+
+def check_line_new(seq):
+    safe=True
+    safeValues=(1,2,3)
+
+    if (seq[1]-seq[0] > 0):
+        signal=1
+    elif (seq[1]-seq[0] < 0):
+        signal=-1
+    else:
+        return False #if first 2 values are equal, it's not safe
+    
+    for i in range(1,len(seq)):
+        delta=seq[i]-seq[i-1]
+        #Fail if sequence doesn't follow increase/decrease
+        #or delta isn't a safe value
+        if (delta*signal<0 or abs(delta) not in safeValues):
+            safe=False
+            break
+
+    return safe
+
 def check_line(seq):
     leng = len(seq)
     differences = []
@@ -14,7 +36,7 @@ def check_line(seq):
 
 for line in inp:
     currentLine = [int(x) for x in line.split(' ')]
-    safeCount+=1 if check_line(currentLine) else 0
+    safeCount+=1 if check_line_new(currentLine) else 0
 
 print('Safe Reports (challenge 1):', safeCount)
 #Right answer: 306
