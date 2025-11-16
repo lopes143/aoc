@@ -1,5 +1,5 @@
 from tqdm import tqdm
-a = open("input.txt", "r").read().strip().split("\n")
+a = open("../input.txt", "r").read().strip().split("\n")
 tab = [list(a2) for a2 in a]
 
 line_number = len(tab)
@@ -70,3 +70,4 @@ for x1, x2 in tqdm(placesSeen):
         loopCount += 1
 
 print("Loop count (challenge 2):", loopCount)
+#Right answer: 1688

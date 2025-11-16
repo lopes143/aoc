@@ -1,4 +1,4 @@
-a = open("input.txt", "r").read().strip().split("\n")
+a = open("../input.txt", "r").read().strip().split("\n")
 tab = [list(a2) for a2 in a]
 
 line_number = len(tab)
@@ -35,3 +35,4 @@ while True:
         x, y = nextX, nextY
     
 print("Places seen (challenge 1):", len(placesSeen))
+#Right answer: 4665

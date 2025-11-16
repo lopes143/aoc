@@ -1,7 +1,5 @@
 #include "dec05.hpp"
 
-using namespace std;
-
 bool check_rule_exists(vector<pair<int,int>> &rules, int n1, int n2) {
     for (auto r : rules)
         if (r.first==n1 && r.second==n2)

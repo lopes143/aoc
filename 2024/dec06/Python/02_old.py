@@ -1,11 +1,13 @@
-input1 = open('input.txt', 'r').read().split('\n')
+input1 = open('../input.txt', 'r').read().split('\n')
 input2 = []
 for i in input1: #convert each string to a list of characters
     a = []
     for i2 in i:
         a.append(i2)
     input2.append(a)
-          
+
+ourTab = input2.copy()
+
 def find_guard(tab):
     #find "^, v, <, >" in tab
     for i in range(len(tab)):
@@ -17,9 +19,17 @@ def find_guard(tab):
 def go_up(tab):
     try:
         a = find_guard(tab)
-        tab[a[0]][a[1]] = "X"
-        tab[a[0]-1][a[1]] = "^"
-        return tab
+        t = tab.deepcopy()
+        if t[a[0]][a[1]-1] == "-" or t[a[0]][a[1]+1] == "-":
+            t[a[0]][a[1]] = "+"
+        else:
+            t[a[0]][a[1]] = "|"
+        if t[a[0]-1][a[1]] != "|":
+            t[a[0]-1][a[1]] = "^"
+        else:
+            #We're in a loop
+            return "loop"
+        return t
     except: #The guard has left the map
         return None
 
@@ -27,7 +37,10 @@ def go_down(tab):
     #find "v" in tab
     try:
         a = find_guard(tab)
-        tab[a[0]][a[1]] = "X"
+        if tab[a[0]][a[1]-1] == "-" or tab[a[0]][a[1]+1] == "-":
+            tab[a[0]][a[1]] = "+"
+        else:
+            tab[a[0]][a[1]] = "|"
         tab[a[0]+1][a[1]] = "v"
         return tab
     except: #The guard has left the map
@@ -37,7 +50,10 @@ def go_left(tab):
     #find "<" in tab
     try:
         a = find_guard(tab)
-        tab[a[0]][a[1]] = "X"
+        if tab[a[0]-1][a[1]] == "|" or tab[a[0]+1][a[1]] == "|":
+            tab[a[0]][a[1]] = "+"
+        else:
+            tab[a[0]][a[1]] = "-"
         tab[a[0]][a[1]-1] = "<"
         return tab
     except: #The guard has left the map
@@ -47,17 +63,20 @@ def go_right(tab):
     #find ">" in tab
     try:
         a = find_guard(tab)
-        tab[a[0]][a[1]] = "X"
+        if tab[a[0]-1][a[1]] == "|" or tab[a[0]+1][a[1]] == "|":
+            tab[a[0]][a[1]] = "+"
+        else:
+            tab[a[0]][a[1]] = "-"
         tab[a[0]][a[1]+1] = ">"
         return tab
     except: #The guard has left the map
         return None
 
-ourTab = input2.copy() #Then we need to create a copy of the input tab
-guardPos = find_guard(ourTab) #First we need to find the initial guard position
-guardState = ourTab[guardPos[0]][guardPos[1]] #Variable to store current guard state
 
-while guardPos != None:
+while True:
+    guardPos = find_guard(ourTab)
+    guardState = ourTab[guardPos[0]][guardPos[1]]
+
     try:    
         if guardState == "^":
             if ourTab[guardPos[0]-1][guardPos[1]] == '#':
@@ -87,11 +106,11 @@ while guardPos != None:
         go_left(ourTab)
     elif guardState == ">":
         go_right(ourTab)
+    else:
+        break
 
-    guardPos = find_guard(ourTab)
-
-#Count Xs in tab
-xCount = 0
+#Count loops
+loopCount = 0
 for i in ourTab:
-    xCount += i.count("X")
-print('X Count (challenge 1):',xCount+1) #+1 because the final guard position is also counted as an X
+    loopCount += i.count("X")
+print('Loop Count (challenge 2):',loopCount) #+1 because the final guard position is also counted as an X

@@ -1,7 +1,5 @@
 #include "dec05.hpp"
 
-using namespace std;
-
 int main() {
     vector<pair<int,int>> rules;
     vector<vector<int>> instructions;
