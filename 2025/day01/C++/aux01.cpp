@@ -13,5 +13,7 @@ bool parse_input(list<pair<char,uint>> &orders) {
         ls >> ch >> i;
         orders.emplace_back(ch,i);
     }
+
+    file.close();
     return true;
 }

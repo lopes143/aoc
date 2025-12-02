@@ -23,5 +23,7 @@ int main() {
     }
     
     cout << "Vault password - zero count (challenge 1): " << zeroCount << endl;
+    //Right answer: 1084
+    
     return EXIT_SUCCESS;
 }
