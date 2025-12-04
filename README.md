@@ -4,7 +4,7 @@ This repository stores all programs for AOC, written by lopes143
 
 Each challenge of each day is developed both in C and Python.
 
-C building command: `gcc -O3 -Wall -Wextra -Werror -Wno-unused-result -o FILE FILE.c `
+C/C++ building command: `gcc/g++ -O3 -Wall -lm {files.c/cpp} -o {exe}`
 
 Optional parameter: `-g` (enables better debugging)
 
