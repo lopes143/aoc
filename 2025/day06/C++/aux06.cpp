@@ -1,5 +1,4 @@
 #include "day06.hpp"
-#include <cctype>
 
 bool parse_input_ch1(vector<vector<uint>> &nums, vector<char> &ops) {
     ifstream file("../input.txt");
