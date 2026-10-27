@@ -11,36 +11,29 @@ int main() {
     }
 
     //get max_ID
-    for (int i=disk.size()-1; i>=0; i--) {
-        if (disk.at(i)!=-1) {
-            max_ID = disk.at(i);
+    for (size_t i=disk.size(); i>0; i--) {
+        if (disk.at(i-1)!=-1) {
+            max_ID = disk.at(i-1);
             break;
         }
     }
 
-    print_disk(disk);
+    //print_disk(disk);
 
     //defrag disk
     for (int id=max_ID; id>=0; id--) {
-        optional<diskBlock> block = find_block_with_ID(disk, id);
-        optional<diskBlock> empty = find_empty_space(disk,block->size);
-
-        if (!empty || empty->right>block->left) {
-            if (block->size!=empty->size) cout << "Size mismatch\n";
-            continue;
-        }
-        
-        while (block->left!=block->right && empty->left!=empty->right) {
-            swap(block->left,empty->left);
-            block->left++;
-            empty->left++;
+        pair<int,int> block = find_block_with_ID(disk, id);
+        int block_size = block.second-block.first+1;
+        pair<int,int> empty = find_empty_space(disk, block_size);
+        if (empty.first!=-1 && empty.second!=-1 && empty.second<block.first) {
+            fill_empty_with_block(disk, block, empty);
         }
 
-        print_disk(disk);
+        //print_disk(disk);
     }
 
     //compute checksum
-    for (int i=0; i<disk.size(); i++) {
+    for (size_t i=0; i<disk.size(); i++) {
         if (disk.at(i) != -1)
             checksum += i * disk.at(i);
     }

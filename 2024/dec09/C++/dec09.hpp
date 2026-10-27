@@ -8,12 +8,10 @@
 
 using namespace std;
 
-
-
 bool parse_input(vector<int> &disk);
 void print_disk(const vector<int> &disk);
-optional<diskBlock> find_block_with_ID_old(vector<int> &disk, int &id);
-optional<diskBlock> find_empty_space_old(vector<int> &disk, unsigned int len);
-bool check_empty_block(const vector<int> &block);
+pair<int,int> find_block_with_ID(vector<int> &disk, int id);
+pair<int,int> find_empty_space(vector<int> &disk, int len);
+void fill_empty_with_block(vector<int> &disk, pair<int,int> &block, pair<int,int> &empty);
 
 #endif
